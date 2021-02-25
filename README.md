@@ -17,7 +17,7 @@ _Attributes_: `brand_name` and `state`
 
 _Relationships_: A `gig` has one `gig payment`
 
-The `brand_name` for a `gig` can be any arbitrary string. The initial value of `state` is `applied`. The other possible states for a `gig` are `accepted`, `completed` and `paid`
+The `brand_name` can be any arbitrary string. The initial value of `state` is `applied`. The other possible states for a `gig` are `accepted`, `completed` and `paid`
 
 When the `state` is set to `completed` a `gig payment` should automatically be created for this `gig`.
 
@@ -41,7 +41,7 @@ The `sort` param determines which attribute of `creator` to sort by. The `sort_d
 
 The `limit` param defines the max number of records returned.
 
-The `offset` param defines how many records to skip in the results sets. E.G. if `limit` was 5 and `offset` was 5 this would return records 6 through 10.
+The `offset` param defines how many records to skip in the results set. E.G. if `limit` was 5 and `offset` was 5 this would return records 6 through 10.
 
 ---
 
