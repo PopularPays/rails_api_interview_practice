@@ -49,7 +49,7 @@ The `offset` param defines how many records to skip in the results set. E.G. if 
 
 ### Gigs resource
 
-**POST** `/gigs` - saves a `gig` record to the database. It should provide value for the `brand_name` attribute in the request body.
+**POST** `/gigs` - saves a `gig` record to the database. It should provide value for the `brand_name` attribute in the request body. The created gig should also be linked it to a given creator. 
 
 ---
 
