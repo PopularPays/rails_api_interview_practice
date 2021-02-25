@@ -65,7 +65,7 @@ The `offset` param defines how many records to skip in the results sets. E.G. if
 
 ## CRON
 
-A CRON job should run every 2 minutes which changes the state of any `pending` `gig payment` to `completed`. You can use the [whenever](https://github.com/javan/whenever) gem to [schedule rake tasks](https://dev.to/risafj/cron-jobs-in-rails-a-simple-guide-to-actually-using-the-whenever-gem-now-with-tasks-2omi) to accomplish this behavior.
+A CRON job should run every 2 minutes. This job changes the state of any `pending` `gig payments` to `completed`. You can use the [whenever](https://github.com/javan/whenever) gem to [schedule rake tasks](https://dev.to/risafj/cron-jobs-in-rails-a-simple-guide-to-actually-using-the-whenever-gem-now-with-tasks-2omi) to accomplish this behavior.
 
 ## Serialization
 
