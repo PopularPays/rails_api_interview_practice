@@ -71,6 +71,10 @@ A CRON job should run every 2 minutes. This job changes the state of any `pendin
 
 All endpoints should return data using the [JSON API format](https://jsonapi.org/). You can use the [active model serializers gem](https://github.com/rails-api/active_model_serializers) to automatically serialize data using this format. This gem can also be used to include relationships of records in the response.
 
+## Changing state
+
+There should be some mechanism for changing the state for `gigs` and `gig payments`. You can optionally use the [AASM gem](https://github.com/aasm/aasm).
+
 ## Testing
 
 Add whatever test coverage you deem necessary. Please use the [rspec](https://github.com/rspec/rspec-rails) testing framework. 
