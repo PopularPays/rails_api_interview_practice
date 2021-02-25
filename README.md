@@ -1,4 +1,4 @@
-# rails_api_interview_practice
+# Rails API Interview Practice Project
 The objective of this practice project is to build an API only Rails application. This application should run locally and consist of several API endpoints and Rails models.
 
 ## Models
