@@ -85,4 +85,4 @@ Add whatever test coverage you deem necessary. Please use the [rspec](https://gi
 
 ## Deliverables
 
-To submit your project please archive the project folder in a ZIP and email it to `ian@popularpays.com`
+To submit your project please archive the project folder in a ZIP and email it to `ian@popularpays.com` with the subject `Interview Practice Submission - <your name>`
