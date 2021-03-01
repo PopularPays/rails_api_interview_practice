@@ -3,7 +3,7 @@ The objective of this practice project is to build an API only Rails application
 
 ## Models
 
-There are several models: **creators**, **gigs**, and **gig payments**
+There are several models: **creators**, **gigs**, and **gig payments**. All relationships should be defined in your Rails models.
 
 ### Creators
 
