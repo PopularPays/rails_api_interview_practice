@@ -82,3 +82,7 @@ Your application should be using ActiveRecord so the underlying database shouldn
 ## Testing
 
 Add whatever test coverage you deem necessary. Please use the [rspec](https://github.com/rspec/rspec-rails) testing framework. 
+
+## Deliverables
+
+To submit your project please archive the project folder in a ZIP and email it to `ian@popularpays.com`
