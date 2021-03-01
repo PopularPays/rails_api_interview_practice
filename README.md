@@ -75,6 +75,10 @@ All endpoints should return data using the [JSON API format](https://jsonapi.org
 
 There should be some mechanism for changing the state for `gigs` and `gig payments`. You can optionally use the [AASM gem](https://github.com/aasm/aasm).
 
+## Database
+
+Your application should be using ActiveRecord so the underlying database shouldn't matter much. We will be testing using the PostgreSQL database.
+
 ## Testing
 
 Add whatever test coverage you deem necessary. Please use the [rspec](https://github.com/rspec/rspec-rails) testing framework. 
