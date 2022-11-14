@@ -1,112 +1,95 @@
-# Rails REST API -- Interview Practice Project
-The objective of this practice project is to build an API only Rails application. This application should run locally and consist of several API endpoints and Rails models.
+# City Slicker - Full Stack Interview Practice Project
 
-## Models
+Create a Rails application and complete the various parts below.
 
-There are several models: **creators**, **gigs**, and **gig payments**. All relationships should be defined in your Rails models.
+At Popular Pays & Lightricks, we use Rails project with Rspec (for testing) and Postgresql database. This command:
+`rails new app-name -T -d postgresql` && `rails generate rspec:install` is a command to help you quickly instantiate a new app and get rolling.  Please reach out with questions on the exercise - clarifications are never counted against your submission.
 
-### Creators
+----------------------
 
-_Attributes_: `first_name` and `last_name`
+Part 1 - Modeling
 
-_Relationships_: A `creator` has many `gigs`
+We all call somewhere home. We're proud of where we live and we want to share with the world all the things that make our home special to us. We have an API that allows us to showcase things about a `Place` when you query against it. 
 
-### Gigs
+A `Place` has personal information about its geolocation - `latitude` and `longitude` attributes - as well a `name` and `description` that are both support free text. A `Place` also has a `rating` instance method which is an aggregate average of all `Rating` objects that have that relationship.
 
-_Attributes_: `brand_name` and `state`
+A `Rating` has a float attribute that stores the `value` and a relationship to a particular place. The presence of these attributes and relationships between models should be mandatory and validated.
 
-_Relationships_: A `gig` has one `gig payment`
+Instructions: Build your modeling based on the information above. This should include DB tables and Rails models with methods.
 
-The `brand_name` can be any arbitrary string. The initial value of `state` is `applied`. The other possible states for a `gig` are `accepted`, `completed` and `paid`
+-----------------------
 
-When the `state` is set to `completed` a `gig payment` should automatically be created for this `gig`.
+Part 2 - API Exposure
 
-### Gig Payments
+A `Place` needs to be discoverable by searching. We need to expose the data before we can build the UI.
 
-_Attributes_: `state`
+We want to be able to fuzzy search a `Place` against it's `name` and `description` attributes.  
 
-The initial value of `state` is `pending`. The other possible value is `complete`. When the `state` is set to `complete` the state of the related `gig` should be set to `paid`.
+> We also want to be able to search a `Place` against proximity - or distance. For this, we would use a geolocation mapping library and compare distance from the current location of the user. This is not in scope for the exercise (it's a decent amount of work), but if you finish everything else in the exercise and want to tackle it, go for it!
 
-## API Endpoints
+The endpoint should sort by the most popular - meaning the first object in the collection should have the highest aggregate `rating`.
 
-### Creators resource
+Instructions: 
+1.) Build an collection (ie. index) endpoint that supports fuzzy search by name - making sure to ensure santization/normalization of the search for capitalization differences and trailing and prefixing whitespace search queries.
 
-**POST** `/creators` - saves a `creator` record to the database. It should provide values for the `first_name` and `last_name` attributes in the request body.
+2.) Ensure the response implements pagination parameter support (roll your own for the enpoint or insert a gem library) as well as the sort requirements listed above.
 
----
+3.) Ensure the endpoint returns JSON with all attributes needed for the UI.
 
-**GET** `/creators` - returns a list of creators. It accepts `sort`, `sort_direction`, `limit` and `offset` query params.
+4.) Make sure the endpoint is well tested for all branching logic and handlers.
 
-The `sort` param determines which attribute of `creator` to sort by. The `sort_direction` param should accept either `asc` (ascending) or `desc` (descending)
+5.) Keep in mind errors you might want to rescue.
 
-The `limit` param defines the max number of records returned.
+6.) Further considerations of rate limiting and error handling.
 
-The `offset` param defines how many records to skip in the results set. E.G. if `limit` was 5 and `offset` was 5 this would return records 6 through 10.
+------------------------
 
----
+Part 3 - UI/UX
 
-**GET** `/creators/<id>` - returns a single creator with the given ID
+We want to connect the API to a UI that a web browser user can enjoy and search against. For this exercise you can use any framework you choose to create a Search UI that displays the results.  This means, Vue.js, React.js, Ember.js (this is what we use at Pop Pays), Rails MVC, etc.
 
-### Gigs resource
+Instructions:
+1.) Build a UI that allows you to search based on the requirements of the API.
 
-**POST** `/gigs` - saves a `gig` record to the database. It should provide value for the `brand_name` attribute in the request body. The created gig should also be linked it to a given creator.
+2.) We can have a search bar as a header and a table view as the main content part of the page that returns the table cells of information about the `Place` including `name`, `description` and `rating`.
 
----
+3.) Style the UI as you want. We're not expecting you to be a design pro, but since this is a full stack exercise we are interested in how you layout the UI and your ability to create basic styles.
 
-**GET** `/gigs` - returns a list of gigs. The request has the option to specify a brand name or creator. In this case the endpoint should only return gigs with the given brand name or creator.
+------------------------
 
----
 
-**GET** `/gigs/<id>` - returns a given gig. The request has the option to specify a relationship to include with the response. E.G. If the `gig payment` relationship is specified it returns the `gig` **and** its `gig payment`
+Part 4 - Scaling & Data Integrity
 
----
+This is new web app and idea so we don't expect much traffic in the beginning, but we're hoping to scale it and make sure it can handle the throughput and load growth.
 
-**PUT** `/gigs/<id>` - updates the attributes for a given gig based on the ID.
+Imagine the amount of records on the `places` table is large - At least 1 million records.  The index enpoint for `Place` resource returns a paginated collection but the majority of load on the DB is happening in the search query (see Part 2).
 
-## CRON
+If you had to design a scalable search on this endpoint, how would you go about doing so? This is a critical thinking question that we want you to include as part of the exercise, but do not expect you to implement. Think about issues of scalability and how you would solve them as well as design of the search feature. How would you create a system to handle that quantity of records to query assuming it's only going to grow larger and larger (maybe exponentially)? This could include a plan to implement monitoring, solutions at the DB layer, as well as controller layer.
 
-A CRON job should run every 2 minutes. This job changes the state of any `pending` `gig payments` to `completed`. You can use the [whenever](https://github.com/javan/whenever) gem to [schedule rake tasks](https://dev.to/risafj/cron-jobs-in-rails-a-simple-guide-to-actually-using-the-whenever-gem-now-with-tasks-2omi) to accomplish this behavior.
+What are some problems you might have to solve, or even better pre-emptively in terms of data integrity. For example, the attribute on a `Place` object could easily result in duplicate records if not properly validated and sanitized before persisting.
 
-## Serialization
+ie. Place 1 has name `Chicago`, Place 2 has name `chicago`, Place 3 has name `CHICAGO`. Tell us / show us the best way to solve this and other considerations we may want to take into account.
 
-All endpoints should return data using the [JSON API format](https://jsonapi.org/). You can use the [active model serializers gem](https://github.com/rails-api/active_model_serializers) to automatically serialize data using this format. This gem can also be used to include relationships of records in the response.
+To submit your proposal for this part, simply create a markdown file at the top level of your Rails project titled `Part 4 - Scaling & Integrity`
 
-## Changing state
 
-There should be some mechanism for changing the state for `gigs` and `gig payments`. You can optionally use the [AASM gem](https://github.com/aasm/aasm).
+-----------------------
 
-## Database
+Part 5 - Testing
 
-Your application should be using ActiveRecord so the underlying database shouldn't matter much. We will be testing using the PostgreSQL database.
+We test a lot at Popular Pays and Lightricks.  Not only does it give us security in the features we ship but also piece of mind. Write tests to include coverage of all controller branching, success and error request/response cycle, and unit testing for all model layer logic.
 
-## Authentication & Authorization
+We use Rspec, Capybara, FactoryBot, and shoulda-matchers as utilities and framework for testing. Those are not strictly mandatory but allow to have coverage from the acceptance level down to the unit level.
 
-The API should ensure that not anyone can access it. Implement a basic system of authorization, we can assume that the user has authenticated with us previously and has the proper credentials.
+Make you have a `seeds.rb` to fill the DB.  This will allow us to fire up the app locally and fill the development database with records to manually QA your app build but also could help you have seeded records in the DB for your tests.
 
-## Error Monitoring
 
-The API should have proper error monitoring and return errors that make sense downstream for person or application making the request. Internally, we want to monitor errors, especially 500s so we can implement bug fixes. Externally, we want to render common errors (ie. rate limited, not authorized, bad request, the 400's) in a way to users so they can uunderstand why their requests are failing.
+-----------------------
 
-## Rate limiting
+Part 6 - Delivery
 
-The API should implement some basic form of rate limiting based on the request. Based on how you implement authorization, we'll also need to check that a particular user is not abusing our endpoints.
+To submit your exercise, you have two options:
 
-## Scalability and Searchability
+1.) Please archive the project folder in a ZIP and email it to `justin@lightricks.com` with the subject `Interview Practice Submission - <your name>`.
 
-Imagine the creators database is large - At least 1 million records. While the `GET /creators` endpoint supports some basic functionality - ie. pagination, sort, and limiting, it does not support searchability.
-
-If you had to design a scalable search on this endpoint, how would you go about doing so? This is a critical thinking question that we want you to include as part of the exercise, but do not expect you to implement. Think about issues of scalability and how you would solve them as well as design of the search feature.
-
-For example, the different attributes on a creator you might search (what would we know about a social media creator, imagine we have access to all the information on their public feed.) What if you could search by the types of images they post? Maybe they have a profile where they tell us more about them? Those are all examples of searchable criteria.
-
-The other part is the scalability. How would you architect a system to handle that quantity of records to query assuming it's only going to grow larger and larger (maybe exponentially)? This could include a plan to implement monitoring, solutions at the DB layer as well as monitoring layer.
-
-## Testing
-
-Add whatever test coverage you deem necessary. Please use the [rspec](https://github.com/rspec/rspec-rails) testing framework.
-
-## Deliverables
-
-To submit your project please archive the project folder in a ZIP and email it to `justin@popularpays.com` with the subject `Interview Practice Submission - <your name>`.
-
-If the file size is too large to be attached to an email then upload it to Dropbox or Google Drive and email the link of the ZIP file.
+2.) Please create a public repo and pass the link to `justin@lightricks.com` to be cloned and reviewed.
